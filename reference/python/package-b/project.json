@@ -1,5 +1,5 @@
 {
-  "name": "python",
+  "name": "python-package-b",
   "projectType": "application",
   "implicitDependencies": ["not-exist-module"]
 }
