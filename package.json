@@ -1,16 +1,37 @@
 {
   "name": "sync-pyproject-nx-deps",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest"
+  "description": "Sync pyproject.toml workspace dependencies to Nx project.json implicitDependencies",
+  "main": "dist/lib/sync.js",
+  "types": "dist/lib/sync.d.ts",
+  "bin": {
+    "sync-pyproject-nx-deps": "dist/cli.js"
   },
-  "keywords": [],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm build && pnpm test"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "nx",
+    "monorepo",
+    "python",
+    "pyproject",
+    "workspace",
+    "dependencies"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "packageManager": "pnpm@10.21.0",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@types/node": "^24.10.1",
     "glob": "^11.0.3",

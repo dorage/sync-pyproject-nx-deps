@@ -1,0 +1,11 @@
+src/
+reference/
+plans/
+*.test.ts
+tsconfig.json
+vitest.config.ts
+.git
+.gitignore
+node_modules
+pnpm-lock.yaml
+.DS_Store
