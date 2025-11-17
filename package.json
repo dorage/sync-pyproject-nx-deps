@@ -1,0 +1,23 @@
+{
+  "name": "sync-pyproject-nx-deps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.21.0",
+  "dependencies": {
+    "@types/node": "^24.10.1",
+    "toml": "^3.0.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.10"
+  }
+}

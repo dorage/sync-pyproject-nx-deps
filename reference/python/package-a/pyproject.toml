@@ -1,0 +1,14 @@
+[project]
+name = "package-a"
+version = "0.1.0"
+description = ""
+requires-python = ">=3.13"
+readme = "README.md"
+dependencies = [
+    "package-b",
+    "package-c",
+]
+
+[tool.uv.sources]
+package-a = { workspace = true }
+package-c = { workspace = true }
