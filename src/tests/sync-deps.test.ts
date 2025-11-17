@@ -1,19 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
-
-/**
- * Mock function: 단일 진입점으로 pyproject.toml을 파싱하고 project.json을 업데이트
- * 실제 구현은 나중에 진행
- */
-async function syncPyprojectDeps(rootDir: string): Promise<void> {
-  // TODO: 실제 구현
-  // 1. rootDir에서 모든 pyproject.toml 찾기
-  // 2. 각 pyproject.toml에서 [tool.uv.sources]의 workspace dependencies 추출
-  // 3. 패키지명 -> Nx 프로젝트명 변환
-  // 4. project.json의 implicitDependencies 업데이트
-  throw new Error('Not implemented yet');
-}
+import { syncPyprojectDeps } from '../lib/sync';
 
 describe('syncPyprojectDeps', () => {
   const fixturesDir = path.join(__dirname, 'fixtures');
