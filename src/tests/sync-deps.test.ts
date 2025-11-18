@@ -93,6 +93,30 @@ describe('syncPyprojectDeps', () => {
     expect(afterContent.implicitDependencies).toEqual(['python-package-a', 'python-quoted_package_name']);
   });
 
+  it('should update package-f with dependency when package name differs from directory name', async () => {
+    // Given: package-f depends on package-e, but directory is named package-ee
+    // package-ee/pyproject.toml has name="package-e" and project.json has name="python-package-e"
+    const packageFJsonPath = path.join(pythonDir, 'package-f', 'project.json');
+    const packageEJsonPath = path.join(pythonDir, 'package-ee', 'project.json');
+
+    // Before: implicitDependencies has incorrect value
+    const beforeFContent = JSON.parse(fs.readFileSync(packageFJsonPath, 'utf-8'));
+    const beforeEContent = JSON.parse(fs.readFileSync(packageEJsonPath, 'utf-8'));
+    expect(beforeFContent.implicitDependencies).toEqual(['not-exist-module']);
+    expect(beforeEContent.implicitDependencies).toEqual(['not-exist-module']);
+
+    // When: sync dependencies
+    await syncPyprojectDeps(pythonDir);
+
+    // Then: package-f should correctly resolve package-e to python-package-e
+    const afterFContent = JSON.parse(fs.readFileSync(packageFJsonPath, 'utf-8'));
+    expect(afterFContent.implicitDependencies).toEqual(['python-package-e']);
+
+    // And: package-e (in package-ee directory) should have its dependencies synced
+    const afterEContent = JSON.parse(fs.readFileSync(packageEJsonPath, 'utf-8'));
+    expect(afterEContent.implicitDependencies).toEqual(['python-package-a', 'python-quoted_package_name']);
+  });
+
   it('should update all packages correctly in one run', async () => {
     // When: sync all dependencies
     await syncPyprojectDeps(pythonDir);
@@ -110,11 +134,19 @@ describe('syncPyprojectDeps', () => {
     const packageDJson = JSON.parse(
       fs.readFileSync(path.join(pythonDir, 'package-d', 'project.json'), 'utf-8')
     );
+    const packageEJson = JSON.parse(
+      fs.readFileSync(path.join(pythonDir, 'package-ee', 'project.json'), 'utf-8')
+    );
+    const packageFJson = JSON.parse(
+      fs.readFileSync(path.join(pythonDir, 'package-f', 'project.json'), 'utf-8')
+    );
 
     expect(packageAJson.implicitDependencies).toEqual(['python-package-c']);
     expect(packageBJson.implicitDependencies).toEqual([]);
     expect(packageCJson.implicitDependencies).toEqual(['python-package-b', 'python-package-c']);
     expect(packageDJson.implicitDependencies).toEqual(['python-package-a', 'python-quoted_package_name']);
+    expect(packageEJson.implicitDependencies).toEqual(['python-package-a', 'python-quoted_package_name']);
+    expect(packageFJson.implicitDependencies).toEqual(['python-package-e']);
   });
 });
 

@@ -1,0 +1,5 @@
+{
+  "name": "python-package-f",
+  "projectType": "application",
+  "implicitDependencies": ["not-exist-module"]
+}

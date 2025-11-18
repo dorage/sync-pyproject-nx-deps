@@ -1,0 +1,5 @@
+{
+  "name": "python-package-e",
+  "projectType": "application",
+  "implicitDependencies": ["not-exist-module"]
+}
