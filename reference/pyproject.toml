@@ -1,0 +1,18 @@
+[project]
+name = "python"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
+
+[tool.uv.workspace]
+members = [
+  "python/package-a",
+  "python/package-b",
+  "python/package-c",
+  "python/package-d",
+  "python/package-ee",
+  "python/package-f",
+  "python/quoted_package_name",
+]

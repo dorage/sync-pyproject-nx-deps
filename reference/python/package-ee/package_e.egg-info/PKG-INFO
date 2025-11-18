@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: package-e
+Version: 0.1.0
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Requires-Dist: package-a
+Requires-Dist: quoted_package_name

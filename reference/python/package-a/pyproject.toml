@@ -10,4 +10,5 @@ dependencies = [
 ]
 
 [tool.uv.sources]
+package-b = { workspace = true }
 package-c = { workspace = true }
