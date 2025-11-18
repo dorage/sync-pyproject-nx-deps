@@ -29,8 +29,8 @@ describe('syncPyprojectDeps', () => {
     }
   });
 
-  it('should update package-a project.json with workspace dependency to package-c', async () => {
-    // Given: package-a has workspace dependency on package-c in pyproject.toml
+  it('should update package-a project.json with workspace dependencies to package-b and package-c', async () => {
+    // Given: package-a has workspace dependencies on package-b and package-c in pyproject.toml
     const projectJsonPath = path.join(pythonDir, 'package-a', 'project.json');
 
     // Before: implicitDependencies is empty
@@ -40,9 +40,9 @@ describe('syncPyprojectDeps', () => {
     // When: sync dependencies
     await syncPyprojectDeps(pythonDir);
 
-    // Then: implicitDependencies should include python-package-c
+    // Then: implicitDependencies should include python-package-b and python-package-c (sorted)
     const afterContent = JSON.parse(fs.readFileSync(projectJsonPath, 'utf-8'));
-    expect(afterContent.implicitDependencies).toEqual(['python-package-c']);
+    expect(afterContent.implicitDependencies).toEqual(['python-package-b', 'python-package-c']);
   });
 
   it('should clear package-b project.json as it has no workspace dependencies', async () => {
@@ -61,8 +61,8 @@ describe('syncPyprojectDeps', () => {
     expect(afterContent.implicitDependencies).toEqual([]);
   });
 
-  it('should update package-c project.json with multiple workspace dependencies', async () => {
-    // Given: package-c has workspace dependencies on package-b and package-c in pyproject.toml
+  it('should update package-c project.json with multiple workspace dependencies including self-reference', async () => {
+    // Given: package-c has workspace dependencies on package-b and package-c (self-reference) in pyproject.toml
     const projectJsonPath = path.join(pythonDir, 'package-c', 'project.json');
 
     // Before: implicitDependencies has incorrect value
@@ -141,7 +141,7 @@ describe('syncPyprojectDeps', () => {
       fs.readFileSync(path.join(pythonDir, 'package-f', 'project.json'), 'utf-8')
     );
 
-    expect(packageAJson.implicitDependencies).toEqual(['python-package-c']);
+    expect(packageAJson.implicitDependencies).toEqual(['python-package-b', 'python-package-c']);
     expect(packageBJson.implicitDependencies).toEqual([]);
     expect(packageCJson.implicitDependencies).toEqual(['python-package-b', 'python-package-c']);
     expect(packageDJson.implicitDependencies).toEqual(['python-package-a', 'python-quoted_package_name']);

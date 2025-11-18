@@ -10,9 +10,9 @@ describe('extractWorkspaceDependencies', () => {
     const pyprojectPath = path.join(referenceDir, 'package-a', 'pyproject.toml');
     const deps = extractWorkspaceDependencies(pyprojectPath);
 
-    // package-c가 workspace = true로 설정되어 있음
-    expect(deps).toEqual(['package-c']);
-    expect(deps).toHaveLength(1);
+    // package-b와 package-c가 workspace = true로 설정되어 있음
+    expect(deps).toEqual(expect.arrayContaining(['package-b', 'package-c']));
+    expect(deps).toHaveLength(2);
   });
 
   it('should return empty array for package-b (no workspace dependencies)', () => {
