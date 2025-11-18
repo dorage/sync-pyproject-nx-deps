@@ -16,6 +16,7 @@ export interface PackageMapping {
 
 /**
  * Builds a mapping table from pyproject.toml package names to Nx project names
+ * Automatically handles both underscore and hyphen variants of package names
  *
  * @param pyprojects - Array of PyProjectFile objects from scanner
  * @returns PackageMapping object with package names as keys and Nx project names as values
@@ -24,7 +25,12 @@ export interface PackageMapping {
  * ```typescript
  * const pyprojects = await scanPyProjectFiles('/root');
  * const mapping = buildPackageMapping(pyprojects);
- * // { "package-a": "python-package-a", "package-b": "python-package-b" }
+ * // {
+ * //   "package-a": "python-package-a",
+ * //   "package_a": "python-package-a",  // auto-generated variant
+ * //   "shared-model": "python-shared-model",
+ * //   "shared_model": "python-shared-model"  // auto-generated variant
+ * // }
  * ```
  */
 export function buildPackageMapping(pyprojects: PyProjectFile[]): PackageMapping {
@@ -52,8 +58,21 @@ export function buildPackageMapping(pyprojects: PyProjectFile[]): PackageMapping
         continue;
       }
 
-      // 3. Add to mapping table: { [packageName]: nxProjectName }
+      // 3. Add original package name to mapping table
       mapping[packageName] = nxProjectName;
+
+      // 4. Add normalized variants to handle underscore/hyphen interchangeably
+      // This allows both "shared-model" and "shared_model" to map to the same Nx project
+      const hyphenVariant = packageName.replace(/_/g, '-');
+      const underscoreVariant = packageName.replace(/-/g, '_');
+
+      if (hyphenVariant !== packageName) {
+        mapping[hyphenVariant] = nxProjectName;
+      }
+
+      if (underscoreVariant !== packageName) {
+        mapping[underscoreVariant] = nxProjectName;
+      }
 
     } catch (error) {
       console.warn(`Warning: Failed to process ${pyproject.path}:`, error);
