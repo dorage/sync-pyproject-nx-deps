@@ -1,6 +1,6 @@
 {
   "name": "sync-pyproject-nx-deps",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Sync pyproject.toml workspace dependencies to Nx project.json implicitDependencies",
   "main": "dist/lib/sync.js",
   "types": "dist/lib/sync.d.ts",
