@@ -37,4 +37,13 @@ describe('extractWorkspaceDependencies', () => {
 
     expect(deps).toEqual([]);
   });
+
+  it('should extract workspace dependencies from package-d (with quoted dependency names)', () => {
+    const pyprojectPath = path.join(referenceDir, 'package-d', 'pyproject.toml');
+    const deps = extractWorkspaceDependencies(pyprojectPath);
+
+    // package-a와 "quoted_package_name"(큰따옴표로 래핑됨)가 workspace = true로 설정되어 있음
+    expect(deps).toEqual(expect.arrayContaining(['package-a', 'quoted_package_name']));
+    expect(deps).toHaveLength(2);
+  });
 });

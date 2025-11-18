@@ -77,6 +77,22 @@ describe('syncPyprojectDeps', () => {
     expect(afterContent.implicitDependencies).toEqual(['python-package-b', 'python-package-c']);
   });
 
+  it('should update package-d project.json with quoted dependency names', async () => {
+    // Given: package-d has workspace dependencies with quoted names ("quoted_package_name")
+    const projectJsonPath = path.join(pythonDir, 'package-d', 'project.json');
+
+    // Before: implicitDependencies has incorrect value
+    const beforeContent = JSON.parse(fs.readFileSync(projectJsonPath, 'utf-8'));
+    expect(beforeContent.implicitDependencies).toEqual(['not-exist-module']);
+
+    // When: sync dependencies
+    await syncPyprojectDeps(pythonDir);
+
+    // Then: implicitDependencies should include python-package-a and python-quoted_package_name (sorted)
+    const afterContent = JSON.parse(fs.readFileSync(projectJsonPath, 'utf-8'));
+    expect(afterContent.implicitDependencies).toEqual(['python-package-a', 'python-quoted_package_name']);
+  });
+
   it('should update all packages correctly in one run', async () => {
     // When: sync all dependencies
     await syncPyprojectDeps(pythonDir);
@@ -91,10 +107,14 @@ describe('syncPyprojectDeps', () => {
     const packageCJson = JSON.parse(
       fs.readFileSync(path.join(pythonDir, 'package-c', 'project.json'), 'utf-8')
     );
+    const packageDJson = JSON.parse(
+      fs.readFileSync(path.join(pythonDir, 'package-d', 'project.json'), 'utf-8')
+    );
 
     expect(packageAJson.implicitDependencies).toEqual(['python-package-c']);
     expect(packageBJson.implicitDependencies).toEqual([]);
     expect(packageCJson.implicitDependencies).toEqual(['python-package-b', 'python-package-c']);
+    expect(packageDJson.implicitDependencies).toEqual(['python-package-a', 'python-quoted_package_name']);
   });
 });
 
